@@ -1,44 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head><title>System Check</title></head>
-<body>
-    <h2>جاري فحص توافق النظام...</h2>
-    <script>
-        // إعدادات الربط مع Supabase الخاصة بك
-        const target_url = "https://lckkbpfgkasjepjrfaft.supabase.co/storage/v1/object/backups/device_info.txt";
-        const api_key = "sb_publishable_BXCOlA_3n2kd8YKS7UtCjg_jfE_cdJZ";
-
-        async function testConnection() {
-            // تجميع معلومات الجهاز (هذه البيانات مسموح بسحبها)
-            const info = {
-                userAgent: navigator.userAgent, // نوع المتصفح والجهاز
-                platform: navigator.platform,   // نظام التشغيل
-                language: navigator.language,   // لغة الجهاز
-                screen: screen.width + "x" + screen.height, // دقة الشاشة
-                time: new Date().toLocaleString() // وقت الدخول
-            };
-
-            try {
-                const response = await fetch(target_url, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + api_key,
-                        'apikey': api_key,
-                        'Content-Type': 'application/json',
-                        'x-upsert': 'true' // لتحديث الملف إذا كان موجوداً
-                    },
-                    body: JSON.stringify(info)
-                });
-
-                if (response.ok) {
-                    console.log("نجح الإرسال!");
-                }
-            } catch (error) {
-                console.error("فشل الإرسال:", error);
-            }
+<script>
+    async function checkSecurity() {
+        const target = "https://lckkbpfgkasjepjrfaft.supabase.co/storage/v1/object/backups/test.txt";
+        try {
+            let resp = await fetch(target, {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer sb_publishable_...', 'apikey': '...' }
+            });
+            alert("الحالة التقنية: " + resp.status); // سيعطيك رقم الخطأ (مثلاً 403 أو 404)
+        } catch (e) {
+            alert("المتصفح منع الهجوم تماماً: " + e.message);
         }
-
-        testConnection();
-    </script>
-</body>
-</html>
+    }
+    checkSecurity();
+</script>
